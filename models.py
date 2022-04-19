@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torchvision.models import resnet18, resnet34, resnet50
+from torchvision.models import resnet50, efficientnet_b0, mobilenet_v2, mobilenet_v3_small
 
 
 class ClassificationResNet(nn.Module):
@@ -21,21 +21,23 @@ class ClassificationResNet(nn.Module):
         return x
 
 
-def get_base_resnet_module(model_type):
+def get_base_module(model_type):
     """
     Returns the backbone network for required resnet architecture, specified as model_type
     :param model_type: Can be either of {res18, res34, res50}
     """
 
-    if model_type == 'res18':
-        original_model = resnet18(pretrained=False)
-    elif model_type == 'res34':
-        original_model = resnet34(pretrained=False)
-    else:
+    if model_type == "resnet50":
         original_model = resnet50(pretrained=False)
-    base_resnet_module = nn.Sequential(*list(original_model.children())[:-1])
+    elif model_type == "efficientnet_b0":
+        original_model = efficientnet_b0(pretrained=False)
+    elif model_type == "mobilenet_v2":
+        original_model = mobilenet_v2(pretrained=False)
+    elif model_type == "mobilenet_v3_small":
+        original_model = mobilenet_v3_small(pretrained=False)
+    base_module = nn.Sequential(*list(original_model.children())[:-1])
 
-    return base_resnet_module
+    return base_module
 
 
 def classifier_resnet(model_type, num_classes):
@@ -45,9 +47,9 @@ def classifier_resnet(model_type, num_classes):
     :param num_classes: The number of classes that the final network classifies it inputs into.
     """
 
-    base_resnet_module = get_base_resnet_module(model_type)
+    base_module = get_base_module(model_type)
 
-    return ClassificationResNet(base_resnet_module, num_classes)
+    return ClassificationResNet(base_module, num_classes)
 
 
 class PIRLResnet(nn.Module):
@@ -102,9 +104,9 @@ def pirl_resnet(model_type, non_linear_head=False):
     applied to resnet image representations
     """
 
-    base_resnet_module = get_base_resnet_module(model_type)
+    base_module = get_base_module(model_type)
 
-    return PIRLResnet(base_resnet_module, non_linear_head)
+    return PIRLResnet(base_module, non_linear_head)
 
 
 if __name__ == '__main__':
