@@ -66,7 +66,7 @@ if __name__ == '__main__':
     model_file_path = os.path.join(PAR_WEIGHTS_DIR, args.experiment_name + '_epoch_100')
 
     # Get train_val image file_paths
-    base_images_dir = '../stl10_data/unlabelled'
+    base_images_dir = './stl10_data/unlabelled'
     file_names_list = os.listdir(base_images_dir)
     file_names_list = [file_name for file_name in file_names_list if file_name[-4:] == 'jpeg']
     file_paths_list = [os.path.join(base_images_dir, file_name) for file_name in file_names_list]
@@ -128,6 +128,7 @@ if __name__ == '__main__':
     )
     train_losses, val_losses, train_accs, val_accs = [], [], [], []
     for epoch_no in range(args.cont_epoch, args.cont_epoch + epochs):
+        print(f"epoch: {epoch_no}")
         train_loss, train_acc, val_loss, val_acc = model_train_test_obj.train(
             sgd_optimizer, epoch_no, params_max_norm=4,
             train_data_loader=train_loader, val_data_loader=val_loader,
