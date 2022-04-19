@@ -54,7 +54,7 @@ if __name__ == '__main__':
     model_file_path = os.path.join(PAR_WEIGHTS_DIR, args.experiment_name)
 
     # Get train-val file paths and labels for STL10
-    par_train_val_images_dir = './stl10_data/train'
+    par_train_val_images_dir = '../stl10_data/train'
     train_val_file_paths, train_val_labels = get_file_paths_n_labels(par_train_val_images_dir)
     print ('Train val file paths count', len(train_val_file_paths))
     print ('Train val labels count', len(train_val_labels))

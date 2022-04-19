@@ -66,7 +66,7 @@ if __name__ == '__main__':
     model_file_path = os.path.join(PAR_WEIGHTS_DIR, args.experiment_name + '_epoch_100')
 
     # Get train_val image file_paths
-    base_images_dir = 'stl10_data/unlabelled'
+    base_images_dir = '../stl10_data/unlabelled'
     file_names_list = os.listdir(base_images_dir)
     file_names_list = [file_name for file_name in file_names_list if file_name[-4:] == 'jpeg']
     file_paths_list = [os.path.join(base_images_dir, file_name) for file_name in file_names_list]
