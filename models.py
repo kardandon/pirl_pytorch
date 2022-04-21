@@ -56,7 +56,6 @@ class PIRLResnet(nn.Module):
     def __init__(self, resnet_module, non_linear_head=False):
         super(PIRLResnet, self).__init__()
         self.resnet_module = resnet_module
-        self.temp = nn.Linear(11520, 1280)
         self.lin_project_1 = nn.Linear(1280, 128)
         self.lin_project_2 = nn.Linear(128 * 9, 128)
         if non_linear_head:
@@ -72,13 +71,10 @@ class PIRLResnet(nn.Module):
         # Run I and I_t through resnet
         vi_batch = self.resnet_module(i_batch)
         vi_batch = torch.flatten(vi_batch, 1)
-        vi_batch = self.temp(vi_batch)
 
         vi_t_patches_batch = [self.resnet_module(i_t_patches_batch[:, patch_ind, :, :, :])
                               for patch_ind in range(9)]
         vi_t_patches_batch = [torch.flatten(vi_t_patches_batch[patch_ind], 1)
-                              for patch_ind in range(9)]
-        vi_t_patches_batch = [self.temp(vi_t_patches_batch[patch_ind])
                               for patch_ind in range(9)]
 
         # Run resnet features for I and I_t via lin_project_1 layer
